@@ -10,5 +10,12 @@ exports.queryList = {
 
     UPDATE_BOOK : 'UPDATE bms.book SET book_title=$1, book_description=$2, book_author=$3, book_publisher=$4, book_pages=$5, store_code=$6, created_on=$7, created_by=$8 WHERE book_id=$9',
     SAVE_NEW_BOOK :'INSERT INTO bms.book (book_title, book_description, book_author, book_publisher, book_pages, store_code, created_on, created_by) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
-    DELETE_BOOK :'DELETE FROM bms.book WHERE book_id=$1'
+    DELETE_BOOK :'DELETE FROM bms.book WHERE book_id=$1',
+
+
+    GET_ALL_USERS :'SELECT * FROM BMS.USERS',
+    GET_USER_DETAILS :`SELECT * FROM BMS.users WHERE USER_ID =$1`,
+    SAVE_NEW_USER : 'INSERT INTO bms.users (username, "password", email, created_on) VALUES($1, $2, $3, $4);',
+    IS_USER_EXIST_QUERY : ` SELECT COUNT(USER_ID) FROM BMS.users WHERE LOWER(USERNAME) = LOWER($1) OR LOWER(EMAIL)=LOWER($2) `,
+
 }

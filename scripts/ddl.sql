@@ -21,3 +21,12 @@ CREATE TABLE bms.store (
 	created_by varchar(50) NOT NULL,
 	CONSTRAINT store_pkey PRIMARY KEY (store_id)
 );
+
+CREATE TABLE bms.users (
+  user_id serial PRIMARY KEY,
+  username VARCHAR (50) UNIQUE NOT NULL,
+  password VARCHAR (50) NOT NULL,
+  email VARCHAR (355) UNIQUE NOT NULL,
+  created_on TIMESTAMP NOT NULL,
+  last_login TIMESTAMP
+);
