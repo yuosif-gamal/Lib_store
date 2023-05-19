@@ -7,6 +7,8 @@ var parser = require('body-parser');
 var storeRoute = require("./router/storeRoute");
 var bookRoute = require("./router/bookRoute");
 var userRoute = require("./router/userRoute");
+var authorRoute = require("./router/authorRoute");
+
 app.use(cors())
 
 app.use(parser.urlencoded({extended : false}));
@@ -19,6 +21,7 @@ app.get('/', function (req, res) {
 app.use("/api/v1" ,storeRoute)
 app.use("/api/v1" ,bookRoute)
 app.use("/api/v1" ,userRoute)
+app.use("/api/v1" ,authorRoute)
 
 
 app.listen(3000,()=>{

@@ -28,7 +28,6 @@ exports.saveStore =  async (req , res) =>{
         var store_code = genrateStoreCode.genrateStoreCode();
         values = [store_name , store_code ,store_address ,create_on, create_by ];
         var save_new_store = query.queryList.SAVE_NEW_STORE;
-        console.log("here")
         await dbconnect.DataBaseQuery(save_new_store , values);
         
         return res.status(200).send("done , saved in database ") ;

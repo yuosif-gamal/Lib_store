@@ -15,7 +15,7 @@ CREATE TABLE bms.book (
 CREATE TABLE bms.store (
 	store_id serial4 NOT NULL,
 	store_name varchar(500) NOT NULL,
-	store_code varchar(10000) NOT NULL,
+	store_code varchar(5) NOT NULL,
 	store_address varchar(50) NOT NULL,
 	created_on timestamp NOT NULL,
 	created_by varchar(50) NOT NULL,

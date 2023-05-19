@@ -4,8 +4,8 @@ const router = express.Router();
 
 router.get("/users" , userController.getAllUsers);
 
-router.get("/user/details/:id" , userController.getUserDetails);
-router.post("/user/save" , userController.saveUser);
+router.get("/user/:id" , userController.getUserDetails);
+router.post("/user/register" , userController.register);
 
 
 module.exports = router;

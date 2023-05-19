@@ -1,4 +1,3 @@
-
 var query = require('../database/query')
 var dbconnect = require ('../database/connection')
 exports.getAllBooks = async (req , res) =>{
@@ -32,17 +31,28 @@ exports.getBookDetails = async (req , res) =>{
 exports.getBookInSpscificStore = async (req , res) =>{
     try {
         console.log('in controller .. ');
-        var store_code = req.params.store_code;
+        var store_id = req.params.store_id;
         var GET_ALL_BOOKS_IN_STORE = query.queryList.GET_ALL_BOOKS_IN_STORE;
-        var result = await dbconnect.DataBaseQuery(GET_ALL_BOOKS_IN_STORE,[store_code]);
-        console.log('GET_ALL_BOOKS_IN_STORE' + " in code : " + store_code );
+        var result = await dbconnect.DataBaseQuery(GET_ALL_BOOKS_IN_STORE,[store_id]);
+        console.log('GET_ALL_BOOKS_IN_STORE' + " in code : " + store_id );
         return res.status(200).send(JSON.stringify(result.rows));
     } catch (error) {
         console.log("error : " + error);  
         return res.status(500).send({error : 'ERROR , cant select all Books'});
     }
 }
- 
+
+exports.getBooksByAuthor = async (req, res) => {
+    try {
+      const authorId = req.params.authorId ;
+      const getBooksByAuthorQuery = query.queryList.GET_BOOKS_BY_AUTHOR;
+      const result = await dbconnect.DataBaseQuery(getBooksByAuthorQuery, [authorId]);
+      return res.status(200).send(JSON.stringify(result.rows));
+    } catch (error) {
+      console.log('error: ', error);
+      return res.status(500).send({ error: 'ERROR: Unable to retrieve books by author' });
+    }
+  };
 exports.saveBook =  async (req , res) =>{
     try {
         console.log('in controller .. ');
@@ -53,11 +63,13 @@ exports.saveBook =  async (req , res) =>{
         var publisher  = req.body.publisher;
         var pages = req.body.pages;
         var description = req.body.description;
-        var store_code = req.body.store_code;
-        if (!title || !author || !store_code ||  !publisher ){
+        var store_id = req.body.store_id;
+        var author_id = req.body.author_id;
+        if (!title || !author || !store_id ||  !publisher || !author_id){
             return res.status(500).send({error : ' book author and book title be not empty '});
         }
-        values = [title , description ,author ,publisher , pages , store_code , create_on, create_by ];
+        values = [title, description, author, publisher, pages, author_id, store_id, create_on, create_by];
+
         console.log(values);
         var save_new_book = query.queryList.SAVE_NEW_BOOK;
         console.log('save_new_book');
@@ -82,11 +94,11 @@ exports.updateBook =  async (req , res) =>{
         var publisher  = req.body.publisher;
         var pages = req.body.pages;
         var description = req.body.description;
-        var store_code = req.body.store_code;
-        if (!title || !author || !store_code || !publisher ){
+        var author_id = req.body.author_id;
+        if (!title || !author || !store_id ||  !publisher || !author_id){
             return res.status(500).send({error : ' book author and book title be not empty '});
         }
-        values = [title , description ,author ,publisher , pages , store_code , create_on, create_by, bookID ];
+        values = [title, description, author, publisher, pages, author_id, store_id, create_on, create_by, bookID];
         console.log(values);
         var update_book = query.queryList.UPDATE_BOOK;
         await dbconnect.DataBaseQuery(update_book , values);
