@@ -30,3 +30,14 @@ CREATE TABLE bms.users (
   created_on TIMESTAMP NOT NULL,
   last_login TIMESTAMP
 );
+
+
+CREATE TABLE bms.author (
+	author_id serial4 NOT NULL,
+	author_name varchar(100) NOT NULL,
+	age int4 NULL,
+	author_nationality varchar(50) NULL,
+	created_on timestamp NOT NULL,
+	created_by varchar(50) NOT NULL,
+	CONSTRAINT author_pkey PRIMARY KEY (author_id)
+);

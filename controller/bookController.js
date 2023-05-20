@@ -5,7 +5,7 @@ exports.getAllBooks = async (req , res) =>{
         console.log('in controller .. ');
         var get_books_query = query.queryList.GET_ALL_BOOKS;
         var result = await dbconnect.DataBaseQuery(get_books_query);
-        console.log('get_all_books ' );
+        console.log('get_all_books..' );
         return res.status(200).send(JSON.stringify(result.rows));
     } catch (error) {
         console.log("error : " + error);  

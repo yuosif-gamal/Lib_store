@@ -15,7 +15,7 @@ app.use(parser.urlencoded({extended : false}));
 app.use(parser.json());
 
 app.get('/', function (req, res) {
-  res.send('Server Start......');
+  res.send('Server Start...... ');
 })
 
 app.use("/api/v1" ,storeRoute)

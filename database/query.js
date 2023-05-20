@@ -1,8 +1,8 @@
 exports.queryList = {
-    GET_ALL_STORS: 'SELECT STORE_ID, STORE_NAME, STORE_CODE FROM BMS.STORE',
+    GET_ALL_STORS: 'SELECT * FROM BMS.STORE',
     SAVE_NEW_STORE: 'INSERT INTO bms.store(store_name, store_code, store_address, created_on, created_by) VALUES($1,$2, $3, $4, $5)',
-    GET_ALL_BOOKS: 'SELECT book_id, book_title, book_author, book_pages FROM bms.book',
-    GET_BOOK_DETAILS: `SELECT BOOK_ID, BOOK_TITLE, BOOK_DESCRIPTION, BOOK_AUTHOR, BOOK_PUBLISHER, BOOK_PAGES, BOOK.STORE_CODE, BOOK.CREATED_ON, BOOK.CREATED_BY, STORE.STORE_NAME, STORE.STORE_ADDRESS FROM BMS.BOOK INNER JOIN BMS.STORE ON BOOK.STORE_CODE = STORE.STORE_CODE WHERE BOOK_ID = $1`,
+    GET_ALL_BOOKS: 'SELECT book_id, book_title, author_id, book_pages FROM bms.book',
+    GET_BOOK_DETAILS: `SELECT BOOK_ID, BOOK_TITLE, BOOK_DESCRIPTION, author_id, BOOK_PUBLISHER, BOOK_PAGES, BOOK.STORE_CODE, BOOK.CREATED_ON, BOOK.CREATED_BY, STORE.STORE_NAME, STORE.STORE_ADDRESS FROM BMS.BOOK INNER JOIN BMS.STORE ON BOOK.STORE_CODE = STORE.STORE_CODE WHERE BOOK_ID = $1`,
     GET_ALL_BOOKS_IN_STORE: 'SELECT * FROM bms.book WHERE store_id = $1',
     UPDATE_BOOK: 'UPDATE bms.book SET book_title = $1, book_description = $2, book_author = $3, book_publisher = $4, book_pages = $5, store_id = $6,,author_id =$7, created_on = $8, created_by = $9 WHERE book_id = $10',
     SAVE_NEW_BOOK: 'INSERT INTO bms.book (book_title, book_description, book_author, book_publisher, book_pages, store_id,author_id, created_on, created_by) VALUES($1, $2, $3, $4, $5, $6, $7, $8,$9)',
@@ -11,10 +11,11 @@ exports.queryList = {
     GET_USER_DETAILS: 'SELECT * FROM BMS.users WHERE USER_ID = $1',
     SAVE_NEW_USER: 'INSERT INTO bms.users (username, "password", email, created_on) VALUES($1, $2, $3, $4)',
     IS_USER_EXIST_QUERY: 'SELECT COUNT(USER_ID) FROM BMS.users WHERE LOWER(USERNAME) = LOWER($1) OR LOWER(EMAIL) = LOWER($2)',
-    SAVE_NEW_AUTHOR: 'INSERT INTO bms.author (author_name, created_on, created_by) VALUES ($1, $2, $3)',
+    SAVE_NEW_AUTHOR: 'INSERT INTO bms.author (author_name, age, author_nationality,created_on, created_by) VALUES ($1, $2, $3,$4,$5)',
     GET_ALL_AUTHORS: 'SELECT * FROM bms.author',
     UPDATE_AUTHOR_BY_ID: 'UPDATE bms.author SET author_name = $1 WHERE author_id = $2',
     DELETE_AUTHOR_BY_ID: 'DELETE FROM bms.author WHERE author_id = $1',
     GET_AUTHOR_BY_ID: 'SELECT * FROM bms.author WHERE author_id = $1',
     GET_BOOKS_BY_AUTHOR: 'SELECT * FROM bms.book WHERE author_id = $1',
+    // trigger .. condtions , for .. 
   };
