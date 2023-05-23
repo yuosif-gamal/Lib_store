@@ -21,7 +21,7 @@ exports.saveStore =  async (req , res) =>{
         var create_by = 'admin';
         var create_on = new Date();
         var store_name  = req.body.store_name;
-        var store_address = req.body.address;
+        var store_address = req.body.store_address;
         if (!store_name || !store_address ){
             return res.status(500).send({error : 'store name and address be not empty '});
         }
@@ -36,3 +36,17 @@ exports.saveStore =  async (req , res) =>{
         return res.status(500).send({error : 'ERROR , cant save'});
     }
 }
+
+exports.calculateTotalBooksInStore = async (req, res) => {
+    try {
+      const storeId = req.params.store_id;
+  
+      const calculateTotalBooksQuery = query.queryList.TOTAL_BOOKS_IN_STORE;
+      const result = await dbconnect.DataBaseQuery(calculateTotalBooksQuery, [storeId]);
+      const totalBooks = result.rows[0].calculate_number_total_books_in_store;
+      return res.status(200).send(`Total books in store ${storeId}: ${totalBooks}`);
+    } catch (error) {
+      console.log('error: ', error);
+      return res.status(500).send({ error: 'ERROR: Unable to calculate total books in store' });
+    }
+  };

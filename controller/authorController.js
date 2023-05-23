@@ -5,12 +5,14 @@ exports.saveAuthor = async (req, res) => {
   try {
     console.log('in controller...');
     var authorName = req.body.authorName;
-    if (!authorName) {
-      return res.status(500).send({ error: 'Author name cannot be empty' });
+    var author_nationality = req.body.author_nationality;
+    var age = req.body.age;
+    if (!authorName || !author_nationality || !age) {
+      return res.status(500).send({ error: 'authorName , author_nationality and age should not empty' });
     }
     var create_on = new Date();
     var create_by = 'admin';
-    var values = [authorName, create_on, create_by];
+    var values = [authorName, author_nationality, age,create_on, create_by];
     console.log(values);
     var save_new_author = query.queryList.SAVE_NEW_AUTHOR;
     console.log('save_new_author');
@@ -55,14 +57,14 @@ exports.getAuthorById = async (req, res) => {
 exports.updateAuthorById = async (req, res) => {
   try {
     const authorId = req.params.id;
-    const { authorName } = req.body;
+    const  age  = req.body.age;
 
-    if (!authorName) {
-      return res.status(400).send({ error: 'Author name is required' });
+    if (!age) {
+      return res.status(400).send({ error: 'ageis required' });
     }
 
     const updateAuthorQuery = query.queryList.UPDATE_AUTHOR_BY_ID;
-    await dbconnect.DataBaseQuery(updateAuthorQuery, [authorName, authorId]);
+    await dbconnect.DataBaseQuery(updateAuthorQuery, [age, authorId]);
 
     return res.status(200).send('Author updated successfully');
   } catch (error) {
@@ -81,6 +83,6 @@ exports.deleteAuthorById = async (req, res) => {
     return res.status(200).send('Author deleted successfully');
   } catch (error) {
     console.log('error: ', error);
-    return res.status(500).send({ error: 'ERROR: Unable to delete author' });
+    return res.status(500).send({ error: 'ERROR: Unable to delete author because he have a books' });
   }
 };

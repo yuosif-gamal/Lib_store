@@ -13,11 +13,11 @@ exports.getAllBooks = async (req , res) =>{
     }
 }
 
-exports.getBookDetails = async (req , res) =>{
+exports.getBookDetailsByID = async (req , res) =>{
     try {
         console.log('in controller .. ');
         var id = req.params.id;
-        var get_book_details = query.queryList.GET_BOOK_DETAILS;
+        var get_book_details = query.queryList.GET_BOOK_DETAILS_BY_ID;
         console.log('get_book_details' + " in id : " + id );
         var result = await dbconnect.DataBaseQuery(get_book_details,[id]);
         return res.status(200).send(JSON.stringify(result.rows));
@@ -26,8 +26,6 @@ exports.getBookDetails = async (req , res) =>{
         return res.status(500).send({error : 'ERROR , cant select all Books'});
     }
 }
- 
-
 exports.getBookInSpscificStore = async (req , res) =>{
     try {
         console.log('in controller .. ');
@@ -41,34 +39,73 @@ exports.getBookInSpscificStore = async (req , res) =>{
         return res.status(500).send({error : 'ERROR , cant select all Books'});
     }
 }
-
-exports.getBooksByAuthor = async (req, res) => {
+exports.getBooksByPageRange = async (req, res) => {
     try {
-      const authorId = req.params.authorId ;
-      const getBooksByAuthorQuery = query.queryList.GET_BOOKS_BY_AUTHOR;
-      const result = await dbconnect.DataBaseQuery(getBooksByAuthorQuery, [authorId]);
+      const  startPage = req.params.startPage;
+      const  endPage = req.params.endPage;
+      const getBooksByPageRangeQuery = query.queryList.GET_BOOKS_BY_PAGE_RANGE;
+      const result = await dbconnect.DataBaseQuery(getBooksByPageRangeQuery, [startPage, endPage]);
+      return res.status(200).send(JSON.stringify(result.rows));
+    } catch (error) {
+      console.log('error:', error);
+      return res.status(500).send({ error: 'ERROR: Unable to retrieve books by page range' });
+    }
+  };
+  
+exports.getBooksByAuthorID = async (req, res) => {
+    try {
+      const author_id = req.params.author_id ;
+      const getBooksByAuthorQuery = query.queryList.GET_BOOKS_BY_AUTHOR_ID;
+      const result = await dbconnect.DataBaseQuery(getBooksByAuthorQuery, [author_id]);
       return res.status(200).send(JSON.stringify(result.rows));
     } catch (error) {
       console.log('error: ', error);
       return res.status(500).send({ error: 'ERROR: Unable to retrieve books by author' });
     }
-  };
+  }
+
+  exports.getBooksByAuthorName = async (req, res) => {
+    try {
+      const author_name = req.params.author_name ;
+      const getBooksByAuthorQuery = query.queryList.GET_BOOKS_BY_AUTHOR_NAME;
+      const result = await dbconnect.DataBaseQuery(getBooksByAuthorQuery, [author_name]);
+      console.log(author_name);
+      return res.status(200).send(JSON.stringify(result.rows));
+    } catch (error) {
+      console.log('error: ', error);
+      return res.status(500).send({ error: 'ERROR: Unable to retrieve books by author' });
+    }
+  }
+  exports.getBookDetailsByTitle = async (req, res) => {
+    try {
+      const title = req.params.title;
+      const getBookDetailsQuery = query.queryList.GET_BOOK_DETAILS_BY_TITLE;
+      const result = await dbconnect.DataBaseQuery(getBookDetailsQuery, [title]);
+      if (result.rows.length === 0) {
+        return res.status(404).send({error : 'ERROR , cant FOUND IT'});
+      }
+      return res.status(200).send(JSON.stringify(result.rows));
+    } catch (error) {
+      console.log('error:', error);
+      return res.status(500).send({error : 'ERROR , cant select all Books'});
+    }
+  }
+
 exports.saveBook =  async (req , res) =>{
     try {
         console.log('in controller .. ');
         var create_by = 'admin';
         var create_on = new Date();
         var title = req.body.title;
-        var author = req.body.author;
         var publisher  = req.body.publisher;
         var pages = req.body.pages;
         var description = req.body.description;
         var store_id = req.body.store_id;
         var author_id = req.body.author_id;
-        if (!title || !author || !store_id ||  !publisher || !author_id){
-            return res.status(500).send({error : ' book author and book title be not empty '});
+        if (!title  || !store_id ||  !publisher || !author_id){
+            return res.status(500).send({error : ' all should not be empty '});
         }
-        values = [title, description, author, publisher, pages, author_id, store_id, create_on, create_by];
+        values = [title, description, publisher, pages, author_id, store_id, create_on, create_by];
 
         console.log(values);
         var save_new_book = query.queryList.SAVE_NEW_BOOK;
@@ -89,16 +126,16 @@ exports.updateBook =  async (req , res) =>{
         var create_by = 'admin';
         var create_on = new Date();
         var title = req.body.title;
-        var author = req.body.author;
         var bookID=req.body.bookID;
         var publisher  = req.body.publisher;
         var pages = req.body.pages;
         var description = req.body.description;
         var author_id = req.body.author_id;
-        if (!title || !author || !store_id ||  !publisher || !author_id){
+        var store_id = req.body.store_id;
+        if (!title || !store_id ||  !publisher || !author_id){
             return res.status(500).send({error : ' book author and book title be not empty '});
         }
-        values = [title, description, author, publisher, pages, author_id, store_id, create_on, create_by, bookID];
+        values = [title, description, publisher, pages,store_id, author_id,  create_on, create_by, bookID];
         console.log(values);
         var update_book = query.queryList.UPDATE_BOOK;
         await dbconnect.DataBaseQuery(update_book , values);
@@ -126,3 +163,16 @@ exports.deleteBook = async (req , res) => {
         return res.status(500).send({error : 'Failed to delete book with id : '+ id});
     }
 }
+
+
+exports.arrangeBooksAlphabetically = async (req, res) => {
+  try {
+    const arrangeBooksQuery = query.queryList.ARRANGE_BOOKS_ALPHABETICALLY;
+    const result = await dbconnect.DataBaseQuery(arrangeBooksQuery);
+    console.log(result);
+    return res.status(200).send(JSON.stringify(result.rows));
+  } catch (error) {
+    console.log('error: ', error);
+    return res.status(500).send({ error: 'ERROR: Unable to retrieve books' });
+  }
+};
